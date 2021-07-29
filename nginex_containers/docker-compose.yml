@@ -1,0 +1,52 @@
+version: "3.8"
+
+services: 
+    nginx:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args: 
+                ARGUMENTO: "Soy un argumento en docker-compose y puedo trabajar a nivel de Dockerfile"
+        container_name: nginx_c1
+        restart: always
+        environment:
+            MYVAR: "Soy una variable y no trabajo a nivel de Dockerfile"
+        ports: 
+            - 8080:80
+        volumes: 
+            - ./html/:/usr/share/nginx/html:rw
+        networks: 
+            nginx_network:
+                aliases: 
+                    - nginx_host
+
+
+    nginx2:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args: 
+                ARGUMENTO: "Soy un argumento en docker-compose y puedo trabajar a nivel de Dockerfile"
+        container_name: nginx_c2
+        restart: always
+        environment:
+            MYVAR: "Soy una variable y no trabajo a nivel de Dockerfile"
+        ports: 
+            - 8180:80
+        volumes: 
+            - ./html2/:/usr/share/nginx/html:rw
+        networks: 
+            nginx_network:
+                aliases: 
+                    - nginx2_host
+
+
+volumes: 
+    html: {}
+    html2: {}
+networks: 
+    nginx_network:
+        name: nginex_net
+        driver: bridge
+        ipam:
+            driver: default
